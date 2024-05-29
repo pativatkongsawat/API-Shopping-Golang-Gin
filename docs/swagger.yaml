@@ -79,6 +79,36 @@ paths:
       summary: Get all products
       tags:
       - product
+  /product/all/filter:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of products with pagination
+      parameters:
+      - description: Product name
+        in: query
+        name: pname
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/products.Product'
+            type: array
+      summary: Get products
+      tags:
+      - products
   /user/all:
     get:
       consumes:

@@ -29,6 +29,16 @@ func GetAllProduct(ctx *gin.Context) {
 		"products": products})
 }
 
+// @Summary Get products
+// @Description Get a list of products with pagination
+// @Tags product
+// @Accept  json
+// @Produce  json
+// @Param pname query string false "Product name"
+// @Param limit query int false "Limit"
+// @Param page query int false "Page"
+// @Success 200 {array} products.Product
+// @Router /product/all/filter [get]
 func GetProduct(ctx *gin.Context) {
 
 	productmodelhelper := products.ProductModelHelper{DB: database.DBMYSQL}
@@ -71,4 +81,14 @@ func GetProduct(ctx *gin.Context) {
 			Totalprevpage: lipage.Page - 1,
 		},
 	})
+}
+
+func InsertProduct(ctx *gin.Context) error {
+
+	return nil
+}
+
+func UpdateProduct(ctx *gin.Context) error {
+
+	return nil
 }
