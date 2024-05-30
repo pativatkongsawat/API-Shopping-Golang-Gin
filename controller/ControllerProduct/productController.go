@@ -5,6 +5,7 @@ import (
 	"go_gin/helper"
 	"go_gin/models/products"
 	"go_gin/utils"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -88,7 +89,50 @@ func InsertProduct(ctx *gin.Context) error {
 	return nil
 }
 
-func UpdateProduct(ctx *gin.Context) error {
+func UpdateProduct(ctx *gin.Context) {
 
-	return nil
+	now := time.Now()
+
+	productmodelhelper := products.ProductModelHelper{DB: database.DBMYSQL}
+	productdata := []products.UpdateProduct{}
+
+	newproduct := []products.Product{}
+
+	if err := ctx.ShouldBindBodyWithJSON(&productdata); err != nil {
+		ctx.JSON(400, utils.ResponseMessage{
+			Status:  400,
+			Message: "Could not bind",
+			Result:  err.Error(),
+		})
+	}
+
+	for _, i := range productdata {
+		newdata := products.Product{
+			Id:          i.Id,
+			Name:        i.Name,
+			Description: i.Description,
+			Price:       i.Price,
+			Quantity:    i.Quantity,
+			Update_at:   &now,
+			Category_id: i.Category_id,
+		}
+
+		newproduct = append(newproduct, newdata)
+	}
+
+	product, err := productmodelhelper.UpdateProduct(newproduct)
+
+	if err != nil {
+		ctx.JSON(500, utils.ResponseMessage{
+			Status:  500,
+			Message: "Error updating product",
+			Result:  err.Error(),
+		})
+	}
+
+	ctx.JSON(200, gin.H{
+		"Message":  "Success",
+		"Prouduct": product,
+	})
+
 }

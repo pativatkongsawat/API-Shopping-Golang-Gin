@@ -108,7 +108,7 @@ paths:
             type: array
       summary: Get products
       tags:
-      - products
+      - product
   /user/all:
     get:
       consumes:

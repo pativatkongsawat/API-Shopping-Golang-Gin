@@ -60,7 +60,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "products"
+                    "product"
                 ],
                 "summary": "Get products",
                 "parameters": [

@@ -20,6 +20,7 @@ func (Product) TableName() string {
 }
 
 type UpdateProduct struct {
+	Id          int        `json:"id"`
 	Name        string     `json:"name" gorm:"name"`
 	Description string     `json:"description" gorm:"description"`
 	Price       float64    `json:"price" gorm:"price"`
