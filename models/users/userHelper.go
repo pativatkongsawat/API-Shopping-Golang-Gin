@@ -43,24 +43,28 @@ func (u *UserModelHelper) GetUser(fname, lname, email string, limit, page int) (
 	return users, count, nil
 }
 
-func (h *UserModelHelper) InsertUser(data UsersInsert) (*Users, error) {
+func (h *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
+	var usersToInsert []Users
 	now := time.Now()
 
-	user := Users{
-		ID:        uuid.New().String(),
-		Firstname: data.Firstname,
-		Lastname:  data.Lastname,
-		Address:   data.Address,
-		Email:     data.Email,
-		Password:  helper.HashPassword(data.Password),
-		CreatedAt: &now,
-		UpdatedAt: &now,
-		DeletedAt: nil,
+	for _, d := range data {
+		user := Users{
+			ID:        uuid.New().String(),
+			Firstname: d.Firstname,
+			Lastname:  d.Lastname,
+			Address:   d.Address,
+			Email:     d.Email,
+			Password:  helper.HashPassword(d.Password),
+			CreatedAt: &now,
+			UpdatedAt: &now,
+			DeletedAt: nil,
+		}
+		usersToInsert = append(usersToInsert, user)
 	}
 
-	if err := h.DB.Create(&user).Error; err != nil {
+	if err := h.DB.Create(&usersToInsert).Error; err != nil {
 		return nil, err
 	}
 
-	return &user, nil
+	return usersToInsert, nil
 }

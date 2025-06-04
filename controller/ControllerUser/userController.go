@@ -91,10 +91,18 @@ func GetUser(ctx *gin.Context) {
 	})
 }
 
+// @Summary Insert new User
+// @Description Create a new user and insert into the database
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body users.UsersInsert true "User Data"
+// @Success 200 {array} users.UsersInsert
+// @Router /user/insert [post]
 func InsertUser(ctx *gin.Context) {
 	usermodelhelper := users.UserModelHelper{DB: database.DBMYSQL}
 
-	var data users.UsersInsert
+	data := []users.UsersInsert{}
 
 	if err := ctx.ShouldBindJSON(&data); err != nil {
 		ctx.JSON(400, gin.H{
