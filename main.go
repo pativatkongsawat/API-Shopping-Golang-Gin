@@ -35,11 +35,14 @@ func main() {
 	// Product
 	r.GET("/product/all", controllerproduct.GetAllProduct)
 	r.GET("/product/all/filter", controllerproduct.GetProduct)
+	r.POST("/product/insert", controllerproduct.InsertProduct)
 
 	// User
 	r.GET("/user/all", controlleruser.GetAllUser)
 	r.GET("/user/all/filter", controlleruser.GetUser)
 	r.POST("/user/insert", controlleruser.InsertUser)
+
+	//Category
 
 	// Swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
