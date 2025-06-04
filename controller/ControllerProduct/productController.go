@@ -130,7 +130,7 @@ func UpdateProduct(ctx *gin.Context) {
 	newproduct := []products.Product{}
 
 	if err := ctx.ShouldBindBodyWithJSON(&productdata); err != nil {
-		ctx.JSON(400, utils.ResponseMessage{
+		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
 			Status:  400,
 			Message: "Could not bind",
 			Result:  err.Error(),
@@ -154,16 +154,18 @@ func UpdateProduct(ctx *gin.Context) {
 	product, err := productmodelhelper.UpdateProduct(newproduct)
 
 	if err != nil {
-		ctx.JSON(500, utils.ResponseMessage{
+		ctx.JSON(http.StatusInternalServerError, utils.ResponseMessage{
 			Status:  500,
 			Message: "Error updating product",
 			Result:  err.Error(),
 		})
 	}
 
-	ctx.JSON(200, gin.H{
-		"Message":  "Success",
-		"Prouduct": product,
+	ctx.JSON(http.StatusOK, utils.ResponseMessage{
+
+		Status:  200,
+		Message: "UPDATE PRODUCT SUCCSEFULY",
+		Result:  product,
 	})
 
 }
