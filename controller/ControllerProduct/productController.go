@@ -5,6 +5,7 @@ import (
 	"go_gin/helper"
 	"go_gin/models/products"
 	"go_gin/utils"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -84,20 +85,39 @@ func GetProduct(ctx *gin.Context) {
 	})
 }
 
-func InsertProduct(ctx *gin.Context) error {
+func InsertProduct(ctx *gin.Context) {
 
 	productmodelhelper := products.ProductModelHelper{DB: database.DBMYSQL}
 
 	data := []products.InsertProduct{}
 
-	if err := ctx.ShouldBindJSON(data); err != nil {
-		ctx.JSON(400, gin.H{
-			"MESSAGE": "BAD REQUEST",
-			"ERORR":   err.Error(),
+	if err := ctx.ShouldBindJSON(&data); err != nil {
+		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
+			Status:  "400",
+			Message: "BAD REQUEST",
+			Result:  err.Error(),
 		})
+
 	}
 
-	return nil
+	newPro, err := productmodelhelper.CreateProduct(data)
+
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, utils.ResponseMessage{
+			Status:  500,
+			Message: "ERROR TO INSERT PRODUCT",
+			Result:  err.Error(),
+		})
+
+	}
+
+	ctx.JSON(http.StatusOK, utils.ResponseMessage{
+		Status:  200,
+		Message: "CREATE PRODUCT SUCCESFULY",
+		Result:  newPro,
+	})
+
 }
 
 func UpdateProduct(ctx *gin.Context) {

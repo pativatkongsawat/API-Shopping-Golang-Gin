@@ -1,6 +1,8 @@
 package products
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -35,15 +37,36 @@ func (u *ProductModelHelper) GetProduct(pname string, limit, page int) ([]Produc
 	return product, count, nil
 }
 
-func (u *ProductModelHelper) CreateProduct([]Product) error {
+func (u *ProductModelHelper) CreateProduct(data []InsertProduct) ([]Product, error) {
 
 	product := []Product{}
+	now := time.Now()
+
 	tx := u.DB.Begin()
-	if err := tx.Debug().Create(&product).Error; err != nil {
-		return err
+
+	for _, d := range data {
+		newproduct := Product{
+
+			Name:        d.Name,
+			Description: d.Description,
+			Price:       d.Price,
+			Quantity:    d.Quantity,
+			Image:       d.Image,
+			Created_at:  &now,
+			Update_at:   &now,
+			Deleted_at:  nil,
+			Category_id: d.Category_id,
+		}
+		product = append(product, newproduct)
 	}
 
-	return nil
+	if err := tx.Debug().Create(&product).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	tx.Commit()
+	return product, nil
 }
 
 func (u *ProductModelHelper) UpdateProduct(products []Product) ([]Product, error) {
