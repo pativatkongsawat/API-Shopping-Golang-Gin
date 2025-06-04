@@ -4,7 +4,6 @@ import (
 	"go_gin/helper"
 	"time"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -49,7 +48,7 @@ func (h *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
 
 	for _, d := range data {
 		user := Users{
-			ID:        uuid.New().String(),
+			ID:        helper.GenerateUUID(),
 			Firstname: d.Firstname,
 			Lastname:  d.Lastname,
 			Address:   d.Address,

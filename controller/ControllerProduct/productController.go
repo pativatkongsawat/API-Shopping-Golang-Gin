@@ -86,6 +86,17 @@ func GetProduct(ctx *gin.Context) {
 
 func InsertProduct(ctx *gin.Context) error {
 
+	productmodelhelper := products.ProductModelHelper{DB: database.DBMYSQL}
+
+	data := []products.InsertProduct{}
+
+	if err := ctx.ShouldBindJSON(data); err != nil {
+		ctx.JSON(400, gin.H{
+			"MESSAGE": "BAD REQUEST",
+			"ERORR":   err.Error(),
+		})
+	}
+
 	return nil
 }
 

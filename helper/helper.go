@@ -1,6 +1,9 @@
 package helper
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
+)
 
 type Pagination struct {
 	Totalpage     int
@@ -30,4 +33,8 @@ func HashPassword(password string) string {
 		return ""
 	}
 	return string(hashed)
+}
+
+func GenerateUUID() string {
+	return uuid.New().String()
 }
