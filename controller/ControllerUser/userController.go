@@ -92,5 +92,29 @@ func GetUser(ctx *gin.Context) {
 }
 
 func InsertUser(ctx *gin.Context) {
+	usermodelhelper := users.UserModelHelper{DB: database.DBMYSQL}
 
+	var data users.UsersInsert
+
+	if err := ctx.ShouldBindJSON(&data); err != nil {
+		ctx.JSON(400, gin.H{
+			"Message": "BAD REQUEST",
+			"Error":   err.Error(),
+		})
+		return
+	}
+
+	newUser, err := usermodelhelper.InsertUser(data)
+	if err != nil {
+		ctx.JSON(500, gin.H{
+			"Message": "Fail to insert User",
+			"Error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(201, gin.H{
+		"Message": "User created successfully",
+		"User":    newUser,
+	})
 }

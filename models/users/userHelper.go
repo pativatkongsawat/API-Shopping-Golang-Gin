@@ -1,6 +1,10 @@
 package users
 
 import (
+	"go_gin/helper"
+	"time"
+
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -37,4 +41,26 @@ func (u *UserModelHelper) GetUser(fname, lname, email string, limit, page int) (
 	}
 
 	return users, count, nil
+}
+
+func (h *UserModelHelper) InsertUser(data UsersInsert) (*Users, error) {
+	now := time.Now()
+
+	user := Users{
+		ID:        uuid.New().String(),
+		Firstname: data.Firstname,
+		Lastname:  data.Lastname,
+		Address:   data.Address,
+		Email:     data.Email,
+		Password:  helper.HashPassword(data.Password),
+		CreatedAt: &now,
+		UpdatedAt: &now,
+		DeletedAt: nil,
+	}
+
+	if err := h.DB.Create(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }

@@ -19,3 +19,15 @@ type Users struct {
 func (Users) TableName() string {
 	return "users"
 }
+
+type UsersInsert struct {
+	Firstname string `json:"firstname" binding:"required"`
+	Lastname  string `json:"lastname" binding:"required"`
+	Address   string `json:"address"`
+	Email     string `json:"email" binding:"required,email"`
+	Password  string `json:"password" binding:"required,min=6"`
+}
+
+func (UsersInsert) TableName() string {
+	return "users"
+}
