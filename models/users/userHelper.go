@@ -1,6 +1,7 @@
 package users
 
 import (
+	"errors"
 	"go_gin/helper"
 	"time"
 
@@ -68,7 +69,29 @@ func (u *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
 	return usersToInsert, nil
 }
 
-func (u *UserModelHelper) Register(data []UsersInsert) ([]Users, error) {
+func (u *UserModelHelper) Register(data []Users) ([]Users, error) {
 
-	return nil, nil
+	var emails []string
+	for _, user := range data {
+		emails = append(emails, user.Email)
+	}
+
+	var existingUsers []Users
+	if err := u.DB.Where("email IN ?", emails).Find(&existingUsers).Error; err != nil {
+		return nil, err
+	}
+
+	if len(existingUsers) > 0 {
+		return nil, errors.New("some emails already exist")
+	}
+
+	tx := u.DB.Begin()
+
+	if err := tx.Create(&data).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	tx.Commit()
+	return data, nil
 }

@@ -64,6 +64,8 @@ func Register(ctx *gin.Context) {
 			Email:     input.Email,
 			Password:  string(hashedPassword),
 			CreatedAt: &now,
+			UpdatedAt: &now,
+			DeletedAt: nil,
 		}
 		usersToCreate = append(usersToCreate, user)
 	}
@@ -72,4 +74,20 @@ func Register(ctx *gin.Context) {
 
 	user, err := userModelHelper.Register(usersToCreate)
 
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, utils.ResponseMessage{
+			Status:  500,
+			Message: "FAIL TO REGISTER",
+			Result:  err.Error(),
+		})
+		return
+
+	}
+
+	ctx.JSON(http.StatusOK, utils.ResponseMessage{
+		Status:  200,
+		Message: "REGISTER SUCCESS",
+		Result:  user,
+	})
 }
