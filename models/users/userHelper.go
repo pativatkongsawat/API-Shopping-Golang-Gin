@@ -42,7 +42,7 @@ func (u *UserModelHelper) GetUser(fname, lname, email string, limit, page int) (
 	return users, count, nil
 }
 
-func (h *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
+func (u *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
 	var usersToInsert []Users
 	now := time.Now()
 
@@ -61,9 +61,14 @@ func (h *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
 		usersToInsert = append(usersToInsert, user)
 	}
 
-	if err := h.DB.Create(&usersToInsert).Error; err != nil {
+	if err := u.DB.Create(&usersToInsert).Error; err != nil {
 		return nil, err
 	}
 
 	return usersToInsert, nil
+}
+
+func (u *UserModelHelper) Register(data []UsersInsert) ([]Users, error) {
+
+	return nil, nil
 }

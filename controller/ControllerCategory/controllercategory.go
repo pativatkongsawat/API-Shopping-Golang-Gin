@@ -23,6 +23,7 @@ func InsertCategory(ctx *gin.Context) {
 			Message: "CATEGORY BAD REQUEST",
 			Result:  err.Error(),
 		})
+		return
 
 	}
 
@@ -35,6 +36,7 @@ func InsertCategory(ctx *gin.Context) {
 			Message: "ERROR INSERT CATEGORY",
 			Result:  err.Error(),
 		})
+		return
 
 	}
 
@@ -59,6 +61,7 @@ func GetAllCategory(ctx *gin.Context) {
 			Message: "ERROR FOR GET ALL CATEGORY",
 			Result:  err.Error(),
 		})
+		return
 
 	}
 
