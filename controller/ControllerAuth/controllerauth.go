@@ -91,3 +91,7 @@ func Register(ctx *gin.Context) {
 		Result:  user,
 	})
 }
+
+func Login(ctx *gin.Context) {
+
+}

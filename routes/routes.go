@@ -13,6 +13,7 @@ func InitRoutes(r *gin.Engine) {
 	r.GET("/product/all", controllerproduct.GetAllProduct)
 	r.GET("/product/all/filter", controllerproduct.GetProduct)
 	r.POST("/product/insert", controllerproduct.InsertProduct)
+	r.PUT("/product/update", controllerproduct.UpdateProduct)
 
 	r.GET("/user/all", controlleruser.GetAllUser)
 	r.GET("/user/all/filter", controlleruser.GetUser)
