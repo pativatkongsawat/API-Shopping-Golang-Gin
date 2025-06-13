@@ -57,15 +57,16 @@ func Register(ctx *gin.Context) {
 		}
 
 		user := users.Users{
-			ID:        helper.GenerateUUID(),
-			Firstname: input.Firstname,
-			Lastname:  input.Lastname,
-			Address:   input.Address,
-			Email:     input.Email,
-			Password:  string(hashedPassword),
-			CreatedAt: &now,
-			UpdatedAt: &now,
-			DeletedAt: nil,
+			ID:           helper.GenerateUUID(),
+			Firstname:    input.Firstname,
+			Lastname:     input.Lastname,
+			Address:      input.Address,
+			Email:        input.Email,
+			Password:     string(hashedPassword),
+			CreatedAt:    &now,
+			UpdatedAt:    &now,
+			DeletedAt:    nil,
+			PermissionID: 2,
 		}
 		usersToCreate = append(usersToCreate, user)
 	}
@@ -93,5 +94,67 @@ func Register(ctx *gin.Context) {
 }
 
 func Login(ctx *gin.Context) {
+
+	var input users.UserLogin
+
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+
+		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
+
+			Status:  400,
+			Message: "BAD REQUEST",
+			Result:  err.Error(),
+		})
+		return
+
+	}
+
+	db := database.DBMYSQL
+
+	var user users.Users
+
+	if err := db.Where("email = ? ", input.Email).First(&user).Error; err != nil {
+
+		ctx.JSON(http.StatusUnauthorized, utils.ResponseMessage{
+			Status:  401,
+			Message: "INVALID EMAIL OR PASSWORD",
+			Result:  err.Error(),
+		})
+		return
+
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
+
+		ctx.JSON(http.StatusUnauthorized, utils.ResponseMessage{
+			Status:  401,
+			Message: "INVALID EMAIL OR PASSWORD",
+			Result:  err.Error(),
+		})
+		return
+
+	}
+	token, err := GenerateToken(user.Email)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, utils.ResponseMessage{
+			Status:  500,
+			Message: "FAILED TO GENERATE TOKEN",
+			Result:  err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, utils.ResponseMessage{
+		Status:  200,
+		Message: "LOGIN SUCCESS",
+		Result: gin.H{
+			"token":        token,
+			"user_id":      user.ID,
+			"email":        user.Email,
+			"firstname":    user.Firstname,
+			"lastname":     user.Lastname,
+			"permissionID": user.PermissionID,
+		},
+	})
 
 }

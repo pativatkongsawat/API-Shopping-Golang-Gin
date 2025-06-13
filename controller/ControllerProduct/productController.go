@@ -6,6 +6,7 @@ import (
 	"go_gin/models/products"
 	"go_gin/utils"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -168,4 +169,29 @@ func UpdateProduct(ctx *gin.Context) {
 		Result:  product,
 	})
 
+}
+func DeleteProduct(ctx *gin.Context) {
+
+	idStr := ctx.Query("id")
+	if idStr == "" {
+		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
+			Status:  400,
+			Message: "BAD REQUEST",
+		})
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
+			Status:  400,
+			Message: "invalid id format",
+			Result:  err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, utils.ResponseMessage{
+		Status: id,
+	})
 }
