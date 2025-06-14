@@ -27,4 +27,5 @@ func InitRoutes(r *gin.Engine) {
 
 	//Auth
 	r.POST("/register/", controllerauth.Register)
+	r.POST("/login/" , controllerauth.Login)
 }
