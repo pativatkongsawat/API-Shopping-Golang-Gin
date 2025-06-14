@@ -44,6 +44,13 @@ func GetAllUser(ctx *gin.Context) {
 	})
 }
 
+// @Summary Get User Filter
+// @Description Get all User from the database
+// @Tags User
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} helper.UserFilter
+// @Router /user/all/filter [get]
 func GetUser(ctx *gin.Context) {
 	usermodelhelper := users.UserModelHelper{DB: database.DBMYSQL}
 	var userfil helper.UserFilter

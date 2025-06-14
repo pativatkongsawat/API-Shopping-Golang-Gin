@@ -26,6 +26,6 @@ func InitRoutes(r *gin.Engine) {
 	r.POST("/category/insert", controllercategory.InsertCategory)
 
 	//Auth
-	r.POST("/register/", controllerauth.Register)
-	r.POST("/login/" , controllerauth.Login)
+	r.POST("/register", controllerauth.Register)
+	r.POST("/login" , controllerauth.Login)
 }
