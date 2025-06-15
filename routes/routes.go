@@ -10,25 +10,27 @@ import (
 )
 
 func InitRoutes(r *gin.Engine) {
-	//Product
-	r.GET("/product/all", controllerproduct.GetAllProduct)
-	r.GET("/product/all/filter", controllerproduct.GetProduct)
-	r.POST("/product/insert", controllerproduct.InsertProduct)
-	r.PUT("/product/update", controllerproduct.UpdateProduct)
-	r.DELETE("/product/del", controllerproduct.DeleteProduct)
+	api := r.Group("/api")
 
-	//User
-	r.GET("/user/all", controlleruser.GetAllUser)
-	r.GET("/user/all/filter", controlleruser.GetUser)
-	r.POST("/user/insert", controlleruser.InsertUser)
+	// Auth
+	api.POST("/auth/register", controllerauth.Register)
+	api.POST("/auth/login", controllerauth.Login)
 
-	//Category
-	r.GET("/category/all", controllercategory.GetAllCategory)
-	r.POST("/category/insert", controllercategory.InsertCategory)
-	r.PUT("/category/up", controllercategory.UpdateCategory)
-	r.DELETE("/category/del", controllercategory.DeleteCategory)
+	// Users
+	api.GET("/users", controlleruser.GetAllUser)
+	api.GET("/users/search", controlleruser.GetUser)
+	api.POST("/users", controlleruser.InsertUser)
 
-	//Auth
-	r.POST("/register", controllerauth.Register)
-	r.POST("/login", controllerauth.Login)
+	// Products
+	api.GET("/products", controllerproduct.GetAllProduct)
+	api.GET("/products/search", controllerproduct.GetProduct)
+	api.POST("/products", controllerproduct.InsertProduct)
+	api.PUT("/products", controllerproduct.UpdateProduct)
+	api.DELETE("/products", controllerproduct.DeleteProduct)
+
+	// Categories
+	api.GET("/categories", controllercategory.GetAllCategory)
+	api.POST("/categories", controllercategory.InsertCategory)
+	api.PUT("/categories", controllercategory.UpdateCategory)
+	api.DELETE("/categories", controllercategory.DeleteCategory)
 }
