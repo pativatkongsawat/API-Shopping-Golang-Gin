@@ -107,5 +107,16 @@ func (u *ProductModelHelper) UpdateProduct(products []Product) ([]Product, error
 
 func (u *ProductModelHelper) DeleteProduct(id int) ([]Product, error) {
 
-	return nil, nil
+	product := []Product{}
+
+	tx := u.DB.Begin()
+
+	if err := tx.Debug().Where("id = ?", id).Delete(&product).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	tx.Commit()
+
+	return product, nil
 }

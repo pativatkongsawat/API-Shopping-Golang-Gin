@@ -1,6 +1,10 @@
 package users
 
-import "time"
+import (
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+)
 
 type Users struct {
 	ID           string     `gorm:"primaryKey" json:"id"`
@@ -31,4 +35,10 @@ type UsersInsert struct {
 type UserLogin struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required"`
+}
+
+type AuthClaims struct {
+	Email string `json:"email"`
+	Role  int    `json:"role"`
+	jwt.RegisteredClaims
 }

@@ -58,7 +58,7 @@ func GetUser(ctx *gin.Context) {
 	if err := ctx.ShouldBindQuery(&userfil); err != nil {
 		ctx.JSON(400, utils.ResponseMessage{
 			Status:  400,
-			Message: "Error getting user",
+			Message: "ERROR BIND DATA",
 			Result:  err.Error(),
 		})
 		return
@@ -113,7 +113,7 @@ func InsertUser(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&data); err != nil {
 		ctx.JSON(400, gin.H{
-			"Message": "BAD REQUEST",
+			"Message": "ERROR BIND DATA",
 			"Error":   err.Error(),
 		})
 		return

@@ -15,6 +15,7 @@ func InitRoutes(r *gin.Engine) {
 	r.GET("/product/all/filter", controllerproduct.GetProduct)
 	r.POST("/product/insert", controllerproduct.InsertProduct)
 	r.PUT("/product/update", controllerproduct.UpdateProduct)
+	r.DELETE("/product/del", controllerproduct.DeleteProduct)
 
 	//User
 	r.GET("/user/all", controlleruser.GetAllUser)
@@ -24,8 +25,10 @@ func InitRoutes(r *gin.Engine) {
 	//Category
 	r.GET("/category/all", controllercategory.GetAllCategory)
 	r.POST("/category/insert", controllercategory.InsertCategory)
+	r.PUT("/category/up", controllercategory.UpdateCategory)
+	r.DELETE("/category/del", controllercategory.DeleteCategory)
 
 	//Auth
 	r.POST("/register", controllerauth.Register)
-	r.POST("/login" , controllerauth.Login)
+	r.POST("/login", controllerauth.Login)
 }

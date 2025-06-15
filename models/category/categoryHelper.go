@@ -39,3 +39,39 @@ func (u *CategoryModelHelper) GetAllCategory() ([]Category, error) {
 
 	return categorys, nil
 }
+
+func (u *CategoryModelHelper) DeleteCategory(id int) ([]Category, error) {
+
+	category := []Category{}
+
+	tx := u.DB.Begin()
+
+	if err := tx.Debug().Where("id ? = ", id).Delete(&category).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
+	return category, nil
+}
+
+func (u *CategoryModelHelper) UpdateCategory(data []Category) ([]Category, error) {
+
+	updateCategory := []Category{}
+	tx := u.DB.Begin()
+
+	for _, category := range data {
+		updatadata := map[string]interface{}{
+			"Name": category.Name,
+		}
+		if err := tx.Debug().Model(&Category{}).Where("id = ?", category.Id).Updates(updatadata).Error; err != nil {
+			tx.Rollback()
+			return nil, err
+
+		}
+
+		updateCategory = append(updateCategory, category)
+	}
+	tx.Commit()
+
+	return updateCategory, nil
+}

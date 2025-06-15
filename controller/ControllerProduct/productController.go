@@ -51,7 +51,7 @@ func GetProduct(ctx *gin.Context) {
 	if err := ctx.ShouldBindQuery(&lipage); err != nil {
 		ctx.JSON(400, utils.ResponseMessage{
 			Status:  400,
-			Message: "Failed to bind query",
+			Message: "ERROR BIND DATA",
 			Result:  err.Error(),
 		})
 	}
@@ -95,7 +95,7 @@ func InsertProduct(ctx *gin.Context) {
 	if err := ctx.ShouldBindJSON(&data); err != nil {
 		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
 			Status:  "400",
-			Message: "BAD REQUEST",
+			Message: "ERROR BIND DATA",
 			Result:  err.Error(),
 		})
 
@@ -133,7 +133,7 @@ func UpdateProduct(ctx *gin.Context) {
 	if err := ctx.ShouldBindBodyWithJSON(&productdata); err != nil {
 		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
 			Status:  400,
-			Message: "Could not bind",
+			Message: "ERROR BIND DATA",
 			Result:  err.Error(),
 		})
 	}
@@ -176,7 +176,7 @@ func DeleteProduct(ctx *gin.Context) {
 	if idStr == "" {
 		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
 			Status:  400,
-			Message: "BAD REQUEST",
+			Message: "ERROR BIND DATA",
 		})
 		return
 	}
