@@ -136,7 +136,7 @@ func InsertUser(ctx *gin.Context) {
 
 func UpdateUser(ctx *gin.Context) {
 
-	data := users.UserUpdate{}
+	data := []users.UserUpdate{}
 
 	if err := ctx.ShouldBindJSON(&data); err != nil {
 		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
@@ -144,18 +144,41 @@ func UpdateUser(ctx *gin.Context) {
 			Message: "Error bind data",
 			Result:  err.Error(),
 		})
+		return
 	}
 
-	claimAny, err := ctx.Get("user")
+	claimAny, exists := ctx.Get("user")
 
-	if !err {
+	if !exists {
 		ctx.JSON(http.StatusUnauthorized, utils.ResponseMessage{
 			Status:  401,
 			Message: "Unauthorized",
-			Result:  err,
+			Result:  exists,
 		})
+		return
 	}
 
 	claim := claimAny.(*users.AuthClaims)
+
+	usermodelhelper := users.UserModelHelper{DB: database.DBMYSQL}
+
+	updateuser, err := usermodelhelper.UpdateUser(claim.Email, data)
+
+	if err != nil {
+
+		ctx.JSON(http.StatusInternalServerError, utils.ResponseMessage{
+			Status:  500,
+			Message: "Error Update User",
+			Result:  err.Error(),
+		})
+		return
+
+	}
+
+	ctx.JSON(http.StatusOK, utils.ResponseMessage{
+		Status:  200,
+		Message: "Update Success",
+		Result:  updateuser,
+	})
 
 }

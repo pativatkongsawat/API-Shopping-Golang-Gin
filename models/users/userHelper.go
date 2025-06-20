@@ -3,6 +3,7 @@ package users
 import (
 	"errors"
 	"go_gin/helper"
+	"go_gin/models/users"
 	"time"
 
 	"gorm.io/gorm"
@@ -96,7 +97,33 @@ func (u *UserModelHelper) Register(data []Users) ([]Users, error) {
 	return data, nil
 }
 
-func (u *UserModelHelper) UpdateUser(data []Users) ([]Users, error) {
+func (u *UserModelHelper) UpdateUser(useremail string, data []UserUpdate) ([]Users, error) {
 
-	return nil, nil
+	now := time.Now()
+
+	users := []users.Users{}
+
+	tx := u.DB.Begin()
+
+	for _, p := range data {
+		user := map[string]interface{}{
+			"Firstname": p.Firstname,
+			"Lastname":  p.Lastname,
+			"Address ":  p.Address,
+			"Email":     p.Email,
+			"Password":  p.Password,
+			"UpdatedAt": &now,
+			"UpdatedBy": useremail,
+		}
+
+		if err := tx.Debug().Table("users").Create(&user).Error; err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		users = append(users, user)
+
+	}
+
+	return users, nil
 }
