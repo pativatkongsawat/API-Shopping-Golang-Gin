@@ -3,8 +3,10 @@ package routes
 import (
 	controllerauth "go_gin/controller/ControllerAuth"
 	controllercategory "go_gin/controller/ControllerCategory"
+	controllerorder "go_gin/controller/ControllerOrder"
 	controllerproduct "go_gin/controller/ControllerProduct"
 	controlleruser "go_gin/controller/ControllerUser"
+	"go_gin/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,4 +35,7 @@ func InitRoutes(r *gin.Engine) {
 	api.POST("/categories", controllercategory.InsertCategory)
 	api.PUT("/categories", controllercategory.UpdateCategory)
 	api.DELETE("/categories", controllercategory.DeleteCategory)
+
+	//Order
+	api.POST("/order", middleware.AdminMiddleware(), controllerorder.CreateOrder)
 }

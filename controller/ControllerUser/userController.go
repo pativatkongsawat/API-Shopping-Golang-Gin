@@ -133,3 +133,29 @@ func InsertUser(ctx *gin.Context) {
 		"User":    newUser,
 	})
 }
+
+func UpdateUser(ctx *gin.Context) {
+
+	data := users.UserUpdate{}
+
+	if err := ctx.ShouldBindJSON(&data); err != nil {
+		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
+			Status:  400,
+			Message: "Error bind data",
+			Result:  err.Error(),
+		})
+	}
+
+	claimAny, err := ctx.Get("user")
+
+	if !err {
+		ctx.JSON(http.StatusUnauthorized, utils.ResponseMessage{
+			Status:  401,
+			Message: "Unauthorized",
+			Result:  err,
+		})
+	}
+
+	claim := claimAny.(*users.AuthClaims)
+
+}

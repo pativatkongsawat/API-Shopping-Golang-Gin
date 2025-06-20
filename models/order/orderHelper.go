@@ -34,12 +34,12 @@ func (u *OrderModelHelper) CreateOrderHasProduct(orderId int, data []RequestProd
 			ProductId:         p.Id,
 			OrderProductTotal: p.Quantity,
 		}
-		orderdetail := append(orderdetail, newdata)
 
-		if err := tx.Debug().Table("order_has_products").Create(&orderdetail).Error; err != nil {
+		if err := tx.Debug().Table("order_has_products").Create(&newdata).Error; err != nil {
 			tx.Rollback()
 			return nil, err
 		}
+		orderdetail = append(orderdetail, newdata)
 	}
 
 	return &orderdetail, nil

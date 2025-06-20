@@ -96,7 +96,7 @@ func (u *UserModelHelper) Register(data []Users) ([]Users, error) {
 	return data, nil
 }
 
-func (u *UserModelHelper) UpdateUser(data Users) ([]Users, error) {
+func (u *UserModelHelper) UpdateUser(data []Users) ([]Users, error) {
 
 	return nil, nil
 }

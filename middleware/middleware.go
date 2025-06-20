@@ -69,5 +69,18 @@ func AdminMiddleware() gin.HandlerFunc {
 func CustomerMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
+		role, _ := ctx.Get("user")
+
+		if role != "" {
+
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+
+				"Error": "Customer only",
+			})
+			return
+
+		}
+		ctx.Next()
+
 	}
 }

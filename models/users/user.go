@@ -43,3 +43,11 @@ type AuthClaims struct {
 	Role   int    `json:"role"`
 	jwt.RegisteredClaims
 }
+
+type UserUpdate struct {
+	Firstname string `gorm:"not null" json:"firstname"`
+	Lastname  string `gorm:"not null" json:"lastname"`
+	Address   string `json:"address"`
+	Email     string `gorm:"unique" json:"email"`
+	Password  string `gorm:"not null" json:"password"`
+}
