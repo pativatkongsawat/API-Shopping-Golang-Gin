@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"go_gin/database"
 	"go_gin/models/users"
 	"net/http"
 	"os"
@@ -24,7 +23,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-		claims := &jwt.RegisteredClaims{}
+		claims := &users.AuthClaims{}
 
 		secret := os.Getenv("JWT_SECRET")
 		if secret == "" {
@@ -41,19 +40,9 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("user_email", claims.Subject)
-
-		var user users.Users
-		db := database.DBMYSQL
-
-		if err := db.Where("email = ?", claims.Subject).First(&user).Error; err != nil {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"error": "User Not Found",
-			})
-			return
-		}
-
-		ctx.Set("user_role", user.PermissionID)
+		ctx.Set("user", claims)
+		ctx.Set("user_email", claims.Email)
+		ctx.Set("user_role", claims.Role)
 		ctx.Next()
 	}
 }

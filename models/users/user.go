@@ -38,7 +38,8 @@ type UserLogin struct {
 }
 
 type AuthClaims struct {
-	Email string `json:"email"`
-	Role  int    `json:"role"`
+	UserId string `json:"user_id"`
+	Email  string `json:"email"`
+	Role   int    `json:"role"`
 	jwt.RegisteredClaims
 }

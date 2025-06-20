@@ -15,19 +15,22 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GenerateToken(email string, role int) (string, error) {
+func GenerateToken(user users.Users) (string, error) {
 	claims := users.AuthClaims{
-		Email: email,
-		Role:  role,
+		UserId: user.ID,
+		Email:  user.Email,
+		Role:   user.PermissionID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			Subject:   email,
+			Subject:   user.Email,
 		},
 	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }
+
 func Register(ctx *gin.Context) {
 	now := time.Now()
 
@@ -133,7 +136,7 @@ func Login(ctx *gin.Context) {
 		return
 
 	}
-	token, err := GenerateToken(user.Email, user.PermissionID)
+	token, err := GenerateToken(user)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.ResponseMessage{
 			Status:  500,

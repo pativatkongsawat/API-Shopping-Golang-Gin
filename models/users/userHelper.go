@@ -95,3 +95,8 @@ func (u *UserModelHelper) Register(data []Users) ([]Users, error) {
 	tx.Commit()
 	return data, nil
 }
+
+func (u *UserModelHelper) UpdateUser(data Users) ([]Users, error) {
+
+	return nil, nil
+}
