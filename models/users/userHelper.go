@@ -2,8 +2,9 @@ package users
 
 import (
 	"errors"
+	"fmt"
 	"go_gin/helper"
-	"go_gin/models/users"
+
 	"time"
 
 	"gorm.io/gorm"
@@ -49,6 +50,15 @@ func (u *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
 	now := time.Now()
 
 	for _, d := range data {
+		if !helper.IsValidPassword(d.Password) {
+			return nil, fmt.Errorf("password must be at least 8 characters and include uppercase, lowercase, number, and special character")
+		}
+
+		var existing Users
+		if err := u.DB.Where("email = ?", d.Email).First(&existing).Error; err == nil {
+			return nil, fmt.Errorf("email %s already exists", d.Email)
+		}
+
 		user := Users{
 			ID:        helper.GenerateUUID(),
 			Firstname: d.Firstname,
@@ -98,32 +108,40 @@ func (u *UserModelHelper) Register(data []Users) ([]Users, error) {
 }
 
 func (u *UserModelHelper) UpdateUser(useremail string, data []UserUpdate) ([]Users, error) {
-
 	now := time.Now()
-
-	users := []users.Users{}
-
+	updatedUsers := []Users{}
 	tx := u.DB.Begin()
 
 	for _, p := range data {
-		user := map[string]interface{}{
+		if !helper.IsValidPassword(p.Password) {
+			tx.Rollback()
+			return nil, fmt.Errorf("password must be at least 8 characters and include uppercase, lowercase, number, and special character")
+		}
+
+		updateData := map[string]interface{}{
 			"Firstname": p.Firstname,
 			"Lastname":  p.Lastname,
-			"Address ":  p.Address,
+			"Address":   p.Address,
 			"Email":     p.Email,
-			"Password":  p.Password,
+			"Password":  helper.HashPassword(p.Password),
 			"UpdatedAt": &now,
 			"UpdatedBy": useremail,
 		}
 
-		if err := tx.Debug().Table("users").Create(&user).Error; err != nil {
+		if err := tx.Model(&Users{}).Where("email = ?", p.Email).Updates(updateData).Error; err != nil {
 			tx.Rollback()
 			return nil, err
 		}
 
-		users = append(users, user)
+		var updatedUser Users
+		if err := tx.Where("email = ?", p.Email).First(&updatedUser).Error; err != nil {
+			tx.Rollback()
+			return nil, err
+		}
 
+		updatedUsers = append(updatedUsers, updatedUser)
 	}
 
-	return users, nil
+	tx.Commit()
+	return updatedUsers, nil
 }

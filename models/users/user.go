@@ -25,11 +25,11 @@ func (Users) TableName() string {
 }
 
 type UsersInsert struct {
-	Firstname string `json:"firstname" binding:"required"`
-	Lastname  string `json:"lastname" binding:"required"`
+	Firstname string `json:"firstname" binding:"required,alpha"`
+	Lastname  string `json:"lastname" binding:"required,alpha"`
 	Address   string `json:"address"`
 	Email     string `json:"email" binding:"required,email"`
-	Password  string `json:"password" binding:"required,min=6"`
+	Password  string `json:"password" binding:"required,min=8,max=30"`
 }
 
 type UserLogin struct {
@@ -45,9 +45,9 @@ type AuthClaims struct {
 }
 
 type UserUpdate struct {
-	Firstname string `gorm:"not null" json:"firstname"`
-	Lastname  string `gorm:"not null" json:"lastname"`
+	Firstname string `json:"firstname" binding:"required,alpha"`
+	Lastname  string `json:"lastname" binding:"required,alpha"`
 	Address   string `json:"address"`
-	Email     string `gorm:"unique" json:"email"`
-	Password  string `gorm:"not null" json:"password"`
+	Email     string `json:"email" binding:"required,email"`
+	Password  string `json:"password" binding:"required,min=8,max=30"`
 }
