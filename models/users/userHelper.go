@@ -118,6 +118,16 @@ func (u *UserModelHelper) UpdateUser(useremail string, data []UserUpdate) ([]Use
 			return nil, fmt.Errorf("password must be at least 8 characters and include uppercase, lowercase, number, and special character")
 		}
 
+		if !helper.IsValidNameFormat(p.Firstname) {
+			tx.Rollback()
+			return nil, fmt.Errorf("invalid first name format")
+		}
+
+		if !helper.IsValidNameFormat(p.Lastname) {
+			tx.Rollback()
+			return nil, fmt.Errorf("invalid last name format")
+		}
+
 		updateData := map[string]interface{}{
 			"Firstname": p.Firstname,
 			"Lastname":  p.Lastname,
