@@ -69,3 +69,7 @@ func TestRegisterUser(t *testing.T) {
 		})
 	}
 }
+
+func TestUpdateUser(t *testing.T) {
+
+}
