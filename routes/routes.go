@@ -31,11 +31,11 @@ func InitRoutes(r *gin.Engine) {
 	api.DELETE("/products", controllerproduct.DeleteProduct)
 
 	// Categories
-	api.GET("/categories", controllercategory.GetAllCategory)
-	api.POST("/categories", controllercategory.InsertCategory)
-	api.PUT("/categories", controllercategory.UpdateCategory)
-	api.DELETE("/categories", controllercategory.DeleteCategory)
+	api.GET("/categories", middleware.AuthMiddleware(), controllercategory.GetAllCategory)
+	api.POST("/categories", middleware.AuthMiddleware(), controllercategory.InsertCategory)
+	api.PUT("/categories", middleware.AuthMiddleware(), controllercategory.UpdateCategory)
+	api.DELETE("/categories", middleware.AuthMiddleware(), controllercategory.DeleteCategory)
 
 	//Order
-	api.POST("/order", middleware.AdminMiddleware(), controllerorder.CreateOrder)
+	api.POST("/order", middleware.AuthMiddleware(), controllerorder.CreateOrder)
 }

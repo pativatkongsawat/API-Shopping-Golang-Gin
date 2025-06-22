@@ -69,6 +69,7 @@ func (u *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
 			CreatedAt: &now,
 			UpdatedAt: &now,
 			DeletedAt: nil,
+			PermissionID: 2,
 		}
 		usersToInsert = append(usersToInsert, user)
 	}

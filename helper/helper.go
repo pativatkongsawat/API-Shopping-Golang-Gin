@@ -51,8 +51,16 @@ func IsValidNameFormat(name string) bool {
 
 	first := rune(name[0])
 
+	
 	if first >= 'a' && first <= 'z' {
 		return false
+	}
+
+	
+	for _, r := range name {
+		if r >= '0' && r <= '9' {
+			return false
+		}
 	}
 
 	return true
