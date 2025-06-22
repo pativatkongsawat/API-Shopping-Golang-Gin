@@ -21,6 +21,7 @@ type UserPayloads struct {
 	InvalidEmail     map[string]interface{} `json:"invalid_email"`
 	ShortPassword    map[string]interface{} `json:"short_password"`
 	InvalidFirstname map[string]interface{} `json:"invalid_firstname"`
+	InvalidLastname  map[string]interface{} `json:"invalid_lastname"`
 }
 
 func setupRouter() {
@@ -54,6 +55,7 @@ func TestRegisterUser(t *testing.T) {
 		{"Invalid Email", payloads.InvalidEmail, http.StatusBadRequest},
 		{"Short Password", payloads.ShortPassword, http.StatusBadRequest},
 		{"Invalid Firstname", payloads.InvalidFirstname, http.StatusBadRequest},
+		{"Invalid LastName", payloads.InvalidLastname, http.StatusBadRequest},
 	}
 
 	for _, tt := range tests {
