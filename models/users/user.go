@@ -25,8 +25,8 @@ func (Users) TableName() string {
 }
 
 type UsersInsert struct {
-	Firstname string `json:"firstname" binding:"required,alpha"`
-	Lastname  string `json:"lastname" binding:"required,alpha"`
+	Firstname string `json:"firstname" binding:"required"`
+	Lastname  string `json:"lastname" binding:"required"`  
 	Address   string `json:"address"`
 	Email     string `json:"email" binding:"required,email"`
 	Password  string `json:"password" binding:"required,min=8,max=30"`
@@ -45,8 +45,8 @@ type AuthClaims struct {
 }
 
 type UserUpdate struct {
-	Firstname string `json:"firstname" binding:"required,alpha"`
-	Lastname  string `json:"lastname" binding:"required,alpha"`
+	Firstname string `json:"firstname" binding:"required"`
+	Lastname  string `json:"lastname" binding:"required"`
 	Address   string `json:"address"`
 	Email     string `json:"email" binding:"required,email"`
 	Password  string `json:"password" binding:"required,min=8,max=30"`

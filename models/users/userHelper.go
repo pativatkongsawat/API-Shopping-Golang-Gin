@@ -60,15 +60,15 @@ func (u *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
 		}
 
 		user := Users{
-			ID:        helper.GenerateUUID(),
-			Firstname: d.Firstname,
-			Lastname:  d.Lastname,
-			Address:   d.Address,
-			Email:     d.Email,
-			Password:  helper.HashPassword(d.Password),
-			CreatedAt: &now,
-			UpdatedAt: &now,
-			DeletedAt: nil,
+			ID:           helper.GenerateUUID(),
+			Firstname:    d.Firstname,
+			Lastname:     d.Lastname,
+			Address:      d.Address,
+			Email:        d.Email,
+			Password:     helper.HashPassword(d.Password),
+			CreatedAt:    &now,
+			UpdatedAt:    &now,
+			DeletedAt:    nil,
 			PermissionID: 2,
 		}
 		usersToInsert = append(usersToInsert, user)
@@ -87,21 +87,6 @@ func (u *UserModelHelper) Register(data []Users) ([]Users, error) {
 	var emails []string
 	for _, user := range data {
 		emails = append(emails, user.Email)
-
-		if !helper.IsValidPassword(user.Password) {
-
-			tx.Rollback()
-			return nil, fmt.Errorf("password must be at least 8 characters and include uppercase, lowercase, number, and special character")
-		}
-
-		if !helper.IsValidNameFormat(user.Firstname) {
-			tx.Rollback()
-			return nil, fmt.Errorf("invalid first name format")
-		}
-		if !helper.IsValidNameFormat(user.Lastname) {
-			tx.Rollback()
-			return nil, fmt.Errorf("invalid last name format")
-		}
 
 	}
 

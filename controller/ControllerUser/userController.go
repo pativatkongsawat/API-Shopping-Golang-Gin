@@ -1,6 +1,7 @@
 package controlleruser
 
 import (
+	"fmt"
 	"go_gin/database"
 	"go_gin/helper"
 	"go_gin/models/users"
@@ -116,6 +117,7 @@ func InsertUser(ctx *gin.Context) {
 			"Message": "ERROR BIND DATA",
 			"Error":   err.Error(),
 		})
+		fmt.Print(err)
 		return
 	}
 
@@ -165,6 +167,7 @@ func UpdateUser(ctx *gin.Context) {
 	updateuser, err := usermodelhelper.UpdateUser(claim.Email, data)
 
 	if err != nil {
+		
 
 		ctx.JSON(http.StatusInternalServerError, utils.ResponseMessage{
 			Status:  500,

@@ -35,7 +35,6 @@ func Register(ctx *gin.Context) {
 	now := time.Now()
 
 	var userInputs []users.UsersInsert
-
 	if err := ctx.ShouldBindJSON(&userInputs); err != nil {
 		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
 			Status:  400,
@@ -48,6 +47,35 @@ func Register(ctx *gin.Context) {
 	var usersToCreate []users.Users
 	for _, input := range userInputs {
 
+		// ✅ ตรวจสอบก่อน hash
+		if !helper.IsValidPassword(input.Password) {
+			ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
+				Status:  400,
+				Message: "Invalid password format",
+				Result:  "Password must include uppercase, lowercase, number, and special character",
+			})
+			return
+		}
+
+		if !helper.IsValidNameFormat(input.Firstname) {
+			ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
+				Status:  400,
+				Message: "Invalid firstname format",
+				Result:  "Firstname must not contain numbers and must start with uppercase",
+			})
+			return
+		}
+
+		if !helper.IsValidNameFormat(input.Lastname) {
+			ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
+				Status:  400,
+				Message: "Invalid lastname format",
+				Result:  "Lastname must not contain numbers and must start with uppercase",
+			})
+			return
+		}
+
+		// ✅ Hash หลังจากผ่านการตรวจสอบ
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, utils.ResponseMessage{
@@ -74,22 +102,18 @@ func Register(ctx *gin.Context) {
 	}
 
 	userModelHelper := users.UserModelHelper{DB: database.DBMYSQL}
-
 	user, err := userModelHelper.Register(usersToCreate)
-
 	if err != nil {
-
 		ctx.JSON(http.StatusInternalServerError, utils.ResponseMessage{
 			Status:  500,
 			Message: "FAIL TO REGISTER",
 			Result:  err.Error(),
 		})
 		return
-
 	}
 
-	ctx.JSON(http.StatusOK, utils.ResponseMessage{
-		Status:  200,
+	ctx.JSON(http.StatusCreated, utils.ResponseMessage{
+		Status:  http.StatusCreated,
 		Message: "REGISTER SUCCESS",
 		Result:  user,
 	})

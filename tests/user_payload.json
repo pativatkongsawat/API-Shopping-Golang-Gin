@@ -1,51 +1,51 @@
-{
-  "valid_user": {
+[
+  {
     "firstname": "Patriwet",
     "lastname": "Kongsawat",
     "address": "RoiEt",
-    "email": "pativat.k@kkumail.com",
+    "email": "pat.test01@kkumail.com",
     "password": "Golfpativat719@"
   },
-  "invalid_email": {
+  {
     "firstname": "Patriwet",
     "lastname": "Kongsawat",
     "address": "RoiEt",
-    "email": "pativat.k#kkumail.com",
+    "email": "pat.invalid@kkumail", 
     "password": "Golfpativat719@"
   },
-  "short_password": {
+  {
     "firstname": "Patriwet",
     "lastname": "Kongsawat",
     "address": "RoiEt",
     "email": "pat.short@kkumail.com",
     "password": "1234"
   },
-  "invalid_firstname": {
+  {
     "firstname": "patriwet",
     "lastname": "Kongsawat",
     "address": "RoiEt",
-    "email": "pat.name@kkumail.com",
+    "email": "pat.name1@kkumail.com",
     "password": "Golfpativat719@"
   },
-  "invalid_lastname": {
+  {
     "firstname": "Patriwet",
     "lastname": "kongsawat",
     "address": "RoiEt",
-    "email": "pat.name@kkumail.com",
+    "email": "pat.name2@kkumail.com",
     "password": "Golfpativat719@"
   },
-  "invalid_Numberin_lastname": {
+  {
     "firstname": "Patriwet",
     "lastname": "Kongsawat123",
     "address": "RoiEt",
-    "email": "pat.name@kkumail.com",
+    "email": "pat.name3@kkumail.com",
     "password": "Golfpativat719@"
   },
-  "invalid_Numberin_firstname": {
+  {
     "firstname": "Patriwet123",
     "lastname": "Kongsawat",
     "address": "RoiEt",
-    "email": "pat.name@kkumail.com",
+    "email": "pat.name4@kkumail.com",
     "password": "Golfpativat719@"
   }
-}
+]
