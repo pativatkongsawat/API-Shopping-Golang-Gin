@@ -46,7 +46,7 @@ func (u *CategoryModelHelper) DeleteCategory(id int) ([]Category, error) {
 
 	tx := u.DB.Begin()
 
-	if err := tx.Debug().Where("id ? = ", id).Delete(&category).Error; err != nil {
+	if err := tx.Debug().Where("id = ? ", id).Delete(&category).Error; err != nil {
 		tx.Rollback()
 		return nil, err
 	}

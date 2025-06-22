@@ -82,9 +82,26 @@ func (u *UserModelHelper) InsertUser(data []UsersInsert) ([]Users, error) {
 
 func (u *UserModelHelper) Register(data []Users) ([]Users, error) {
 
+	tx := u.DB.Begin()
 	var emails []string
 	for _, user := range data {
 		emails = append(emails, user.Email)
+
+		if !helper.IsValidPassword(user.Password) {
+
+			tx.Rollback()
+			return nil, fmt.Errorf("password must be at least 8 characters and include uppercase, lowercase, number, and special character")
+		}
+
+		if !helper.IsValidNameFormat(user.Firstname) {
+			tx.Rollback()
+			return nil, fmt.Errorf("invalid first name format")
+		}
+		if !helper.IsValidNameFormat(user.Lastname) {
+			tx.Rollback()
+			return nil, fmt.Errorf("invalid last name format")
+		}
+
 	}
 
 	var existingUsers []Users
@@ -95,8 +112,6 @@ func (u *UserModelHelper) Register(data []Users) ([]Users, error) {
 	if len(existingUsers) > 0 {
 		return nil, errors.New("some emails already exist")
 	}
-
-	tx := u.DB.Begin()
 
 	if err := tx.Create(&data).Error; err != nil {
 		tx.Rollback()

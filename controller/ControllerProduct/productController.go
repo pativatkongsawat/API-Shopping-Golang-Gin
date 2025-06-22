@@ -140,7 +140,7 @@ func UpdateProduct(ctx *gin.Context) {
 
 	for _, i := range productdata {
 		newdata := products.Product{
-			Id:          i.Id,
+
 			Name:        i.Name,
 			Description: i.Description,
 			Price:       i.Price,

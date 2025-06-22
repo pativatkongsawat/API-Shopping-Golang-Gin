@@ -41,10 +41,9 @@ func InsertCategory(ctx *gin.Context) {
 
 	}
 
-	ctx.JSON(http.StatusOK, utils.ResponseMessage{
-		Status:  200,
-		Message: "INSERT CATEGORYSUCSSFULY",
-		Result:  category,
+	ctx.JSON(http.StatusOK, gin.H{
+		"Message":  "Success",
+		"Category": category,
 	})
 
 }
@@ -68,10 +67,9 @@ func GetAllCategory(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, utils.ResponseMessage{
 		Status:  200,
-		Message: "SUCCESFULY",
+		Message: "Success",
 		Result:  categorys,
 	})
-
 }
 
 func DeleteCategory(ctx *gin.Context) {
@@ -92,7 +90,7 @@ func DeleteCategory(ctx *gin.Context) {
 
 	}
 
-	id, err := strconv.Atoi("idstr")
+	id, err := strconv.Atoi(idstr)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, utils.ResponseMessage{
