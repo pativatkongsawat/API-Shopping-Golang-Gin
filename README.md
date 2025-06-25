@@ -14,3 +14,14 @@ A backend system for managing Shopping Card, built with Golang and Gin
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="images/post.png" width="80" />
 </p>
+
+## Technology Stack
+
+- Language: Golang
+- Framework: Gin
+- Database: MySQL 
+- ORM: Gorm
+- Authentication: JWT
+- API Communication: RESTful API
+- Containerization: Docker & Docker Compose
+- API Documentation: Postman , Swagger
