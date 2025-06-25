@@ -5,7 +5,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DB_USERNAME: root
       DB_PASSWORD: golfpativat719
@@ -17,7 +18,12 @@ services:
   db:
     image: mysql:8
     ports:
-      - "3306:3306"
+      - "3310:3306"
     environment:
       MYSQL_ROOT_PASSWORD: golfpativat719
       MYSQL_DATABASE: shopping
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
